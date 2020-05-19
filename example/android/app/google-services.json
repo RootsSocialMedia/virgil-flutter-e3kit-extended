@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121197367953",
+    "firebase_url": "https://teste2ee-c66b3.firebaseio.com",
+    "project_id": "teste2ee-c66b3",
+    "storage_bucket": "teste2ee-c66b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121197367953:android:9b29858628c0654f5ce530",
+        "android_client_info": {
+          "package_name": "com.virgilsecurity.e3kit_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121197367953-1ob660ejec9vt06bjh1eom0gq9784osc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKQz5cxelWFUrheFWBQU86A4W8Jl8PkHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121197367953-1ob660ejec9vt06bjh1eom0gq9784osc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
