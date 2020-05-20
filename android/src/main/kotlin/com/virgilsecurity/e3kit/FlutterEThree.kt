@@ -3,6 +3,8 @@ package com.virgilsecurity.e3kit
 import android.app.Activity
 import android.os.AsyncTask
 import android.os.Looper
+import android.util.Log
+import com.virgilsecurity.android.common.exception.EThreeException
 import com.virgilsecurity.android.common.model.ratchet.RatchetChannel
 import com.virgilsecurity.android.common.model.FindUsersResult
 import com.virgilsecurity.android.ethree.interaction.EThree
@@ -30,7 +32,7 @@ class FlutterEThree {
 
             if(!optional && arg == null) {
                 val errorCode = "argument_not_found"
-                val errorMessage = "Could not find argument `$argument` of type ${arg?.javaClass?.name}"
+                val errorMessage = "Could not find argument `$argument`"
                 result.error(errorCode, errorMessage, null)
                 throw Error("$errorCode: $errorMessage")
             }
@@ -228,7 +230,7 @@ class FlutterEThree {
             result: MethodChannel.Result
     ) {
         val imported = if (user != null) instance.cardManager.importCardAsString(user) else null
-        val res = instance.decrypt(text, imported)
+        val res = instance.authDecrypt(text, imported)
 
         result.success(res)
     }
@@ -318,7 +320,7 @@ class FlutterEThree {
                 instance.createRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
                         activity.runOnUiThread {
-                            ratchetChannels.put(key = identity, value = ratchetRes)
+                            ratchetChannels[identity] = ratchetRes
                             result.success(true)
                         }
                     }
@@ -343,7 +345,6 @@ class FlutterEThree {
         instance.findUsers(listOf(identity), true).addCallback(object: OnResultListener<FindUsersResult> {
             override fun onSuccess(res: FindUsersResult) {
                 val card : Card? = res.get(identity)
-                // card = res.get(identity)
 
                 instance.joinRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
@@ -387,8 +388,6 @@ class FlutterEThree {
 
                 try{
                     val card : Card? = res.get(identity)
-                    // // for debugging purpose
-                    // return result.success(true)
 
                     val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
                     if(ratchetChannel != null){
@@ -414,10 +413,10 @@ class FlutterEThree {
         instance.findUsers(listOf(identity), true).addCallback(object: OnResultListener<FindUsersResult> {
             override fun onSuccess(res: FindUsersResult) {
                 val card : Card? = res.get(identity)
-                // card = res.get(identity)
 
                 instance.deleteRatchetChannel(card!!).addCallback(object: OnCompleteListener {
                     override fun onSuccess() {
+                        ratchetChannels.remove(identity)
                         activity.runOnUiThread {
                             result.success(true)
                         }
@@ -437,6 +436,7 @@ class FlutterEThree {
         })        
     }
 
+    // the app will crash if not yet get the ratchetChannel!
     private fun ratchetEncrypt(identity: String, message: String, result: MethodChannel.Result) {
         try{
             val ratchetChannel : RatchetChannel? = ratchetChannels[identity]
@@ -447,6 +447,7 @@ class FlutterEThree {
         }
     }
 
+    // the app will crash if not yet get the ratchetChannel!
     private fun ratchetDecrypt(identity: String, message: String, result: MethodChannel.Result) {
         try{
             val ratchetChannel : RatchetChannel? = ratchetChannels[identity]

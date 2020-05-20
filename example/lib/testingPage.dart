@@ -14,7 +14,9 @@ class TestingPage extends StatefulWidget {
 class _TestingPageState extends State<TestingPage> {
 
   Device alice;
-  final String oppUid = "DlzIj2dikgNwtF2eXoJCKGogXGE2";
+
+  // final String oppUid = "p0H5J4CqWyXawEVcaNkH3Q0NHHz2";
+  final String oppUid = "okk2DpdpACP9PJUnwXn26PWjiGE3";
 
   // authentication
   GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -108,10 +110,15 @@ class _TestingPageState extends State<TestingPage> {
                 child: Text("Ratchet encrypt and decrypt"),
                 onPressed: () async { 
                   final String encrypted = await alice.ratchetEncrypt(oppUid, "ratchet encrypt"); 
+                  print(encrypted);
                   final String decrypted = await alice.ratchetDecrypt(oppUid, encrypted);
+                  print(decrypted);
+                  // if(decrypted == "mock decrypted"){
+                  //   print("mock decryption success");
+                  // }else 
                   if(decrypted == "ratchet encrypt"){
-                    print("decryption successful");
-                  }else{
+                    print("decryption success");
+                  }else {
                     print("decryption failed");
                   }
                 }),
