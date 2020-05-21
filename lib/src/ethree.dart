@@ -105,6 +105,10 @@ class EThree {
     return await _invokeMethod('ratchetDecrypt', {"identity": identity, "message": message});
   }
 
+  Future<List<String>> ratchetDecryptMultiple(String identity, List<String> messages) async {
+    return await _invokeMethod('ratchetDecryptMultiple', {"identity": identity, "messages": messages});
+  }
+
   Future<T> _invokeMethod<T>(String method, [dynamic arguments]) {
     final args = (arguments ?? {});
     args['_id'] = _id;

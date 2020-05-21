@@ -291,6 +291,18 @@ class Device {
     }
   }
 
+  Future<List<String>> ratchetDecryptMultiple(String identity, List<String> messages) async {
+    final eThree = getEThree();
+    try{
+      final List<String> decrypted = await eThree.ratchetDecryptMultiple(identity, messages);
+      print("double ratchet multiple decryption succeeded");
+      return decrypted;
+    } on PlatformException catch (err) {
+      print("double ratchet multiple decryption failed: $err");
+      return null;
+    }
+  }
+
   Future<void> deleteRatchetChannel(String identity) async {
     final eThree = getEThree();
     try{

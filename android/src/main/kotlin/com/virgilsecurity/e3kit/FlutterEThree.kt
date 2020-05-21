@@ -115,6 +115,11 @@ class FlutterEThree {
                     getArgument("message"),
                     result
                 )
+                "ratchetDecryptMultiple" -> ratchetDecryptMultiple(
+                    getArgument("identity"),
+                    getArgument("messages"),
+                    result
+                )
                 else -> activity.runOnUiThread {
                     result.error(
                             "method_not_recognized",
@@ -453,6 +458,18 @@ class FlutterEThree {
             val ratchetChannel : RatchetChannel? = ratchetChannels[identity]
             val decryptedMessage : String = ratchetChannel!!.decrypt(message)
             result.success(decryptedMessage)
+        }catch(throwable: Throwable){
+            result.error(throwable.toFlutterError())
+        }
+    }
+
+    private fun ratchetDecryptMultiple(identity: String, messages: List<String>, result: MethodChannel.Result) {
+        try{
+            val ratchetChannel : RatchetChannel? = ratchetChannels[identity]
+            val encryptedMessages: RatchetChannel.MultipleString = RatchetChannel.MultipleString(messages)
+            val decryptedMessages: RatchetChannel.MultipleString = ratchetChannel!!.decryptMultiple(encryptedMessages)
+            val decryptedStrings : List<String> = decryptedMessages.multipleText
+            result.success(decryptedStrings)
         }catch(throwable: Throwable){
             result.error(throwable.toFlutterError())
         }

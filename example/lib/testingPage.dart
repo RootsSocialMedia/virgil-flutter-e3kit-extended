@@ -15,8 +15,8 @@ class _TestingPageState extends State<TestingPage> {
 
   Device alice;
 
-  // final String oppUid = "p0H5J4CqWyXawEVcaNkH3Q0NHHz2";
-  final String oppUid = "okk2DpdpACP9PJUnwXn26PWjiGE3";
+  final String oppUid = "p0H5J4CqWyXawEVcaNkH3Q0NHHz2";
+  // final String oppUid = "okk2DpdpACP9PJUnwXn26PWjiGE3";
 
   // authentication
   GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -113,14 +113,21 @@ class _TestingPageState extends State<TestingPage> {
                   print(encrypted);
                   final String decrypted = await alice.ratchetDecrypt(oppUid, encrypted);
                   print(decrypted);
-                  // if(decrypted == "mock decrypted"){
-                  //   print("mock decryption success");
-                  // }else 
                   if(decrypted == "ratchet encrypt"){
                     print("decryption success");
                   }else {
                     print("decryption failed");
                   }
+                }),
+              RaisedButton(
+                child: Text("Ratchet multiple encrypt and decrypt"),
+                onPressed: () async { 
+                  final List<String> encrypteds = List<String>();
+                  encrypteds.add(await alice.ratchetEncrypt(oppUid, "ratchet encrypt 1")); 
+                  encrypteds.add(await alice.ratchetEncrypt(oppUid, "ratchet encrypt 2")); 
+                  encrypteds.add(await alice.ratchetEncrypt(oppUid, "ratchet encrypt 3")); 
+                  final List<String> decrypteds = await alice.ratchetDecryptMultiple(oppUid, encrypteds);
+                  print(decrypteds);
                 }),
               RaisedButton(
                 child: Text("Delete ratchet channel"),

@@ -53,14 +53,14 @@ fun EThreeException.toFlutterError(): FlutterError {
 }
 
 fun EThreeRatchetException.toFlutterError(): FlutterError {
-    if(this.message == "70204: Trying to encrypt empty array.") {
+    if(this.message == "70201: Trying to encrypt empty array.") {
         return FlutterError(
                 "trying_to_encrypt_empty_array",
                 message,
                 null
         )
     }
-    if(this.message == "70204: Trying to decrypt empty array.") {
+    if(this.message == "70202: Trying to decrypt empty array.") {
         return FlutterError(
                 "trying_to_decrypt_empty_array",
                 message,
@@ -74,35 +74,35 @@ fun EThreeRatchetException.toFlutterError(): FlutterError {
                 null
         )
     }
-    if(this.message == "70204: Channel with self is forbidden. Use regular encryption for this purpose.") {
+    if(this.message == "70205: Channel with self is forbidden. Use regular encryption for this purpose.") {
         return FlutterError(
                 "channel_with_self_is_forbidden",
                 message,
                 null
         )
     }
-    if(this.message == "70204: enableRatchet parameter is set to false.") {
+    if(this.message == "70206: enableRatchet parameter is set to false.") {
         return FlutterError(
                 "ratchet_not_enabled",
                 message,
                 null
         )
     }
-    if(this.message == "70204: Provided user has been never initialized with ratchet enabled.") {
+    if(this.message == "70207: Provided user has been never initialized with ratchet enabled.") {
         return FlutterError(
                 "ratchet_not_enabled_for_provided_user",
                 message,
                 null
         )
     }
-    if(this.message == "70204: There is no invitation from provided user.") {
+    if(this.message == "70208: There is no invitation from provided user.") {
         return FlutterError(
                 "no_invitation_from_provided_user",
                 message,
                 null
         )
     }
-    if(this.message == "70204: There is no self card in local storage.") {
+    if(this.message == "70209: There is no self card in local storage.") {
         return FlutterError(
                 "no_self_card_in_local_storage",
                 message,
