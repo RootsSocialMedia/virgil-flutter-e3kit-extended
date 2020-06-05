@@ -3,6 +3,7 @@ package com.virgilsecurity.e3kit
 import com.virgilsecurity.android.common.exception.EThreeException
 import com.virgilsecurity.android.common.exception.EThreeRatchetException
 import com.virgilsecurity.crypto.ratchet.RatchetException
+import com.virgilsecurity.ratchet.exception
 // import com.virgilsecurity.android.common.exception.PrivateKeyNotFoundException
 import io.flutter.plugin.common.MethodChannel
 
@@ -26,6 +27,26 @@ fun Throwable.toFlutterError(): FlutterError {
     }
 
      if(this is EThreeRatchetException) {
+         return this.toFlutterError()
+     }
+
+     if(this is ProtocolException) {
+         return this.toFlutterError()
+     }
+
+     if(this is KeyStorageException) {
+         return this.toFlutterError()
+     }
+
+     if(this is SecureChatException) {
+         return this.toFlutterError()
+     }
+
+     if(this is HexEncodingException) {
+         return this.toFlutterError()
+     }
+
+     if(this is FileDeletionException) {
          return this.toFlutterError()
      }
 
@@ -110,4 +131,54 @@ fun EThreeRatchetException.toFlutterError(): FlutterError {
         )
     }
     return this.defaultFlutterError()
+}
+
+fun ProtocolException.toFlutterError(): FlutterError {
+
+    return FlutterError(
+        "protocol_exception",
+        message,
+        null
+    )
+
+}
+
+fun KeyStorageException.toFlutterError(): FlutterError {
+
+    return FlutterError(
+        "key_storage_exception",
+        message,
+        null
+    )
+
+}
+
+fun SecureChatException.toFlutterError(): FlutterError {
+
+    return FlutterError(
+        "secure_chat_exception",
+        message,
+        null
+    )
+
+}
+
+fun HexEncodingException.toFlutterError(): FlutterError {
+
+    return FlutterError(
+        "hex_encoding_exception",
+        message,
+        null
+    )
+
+}
+
+fun FileDeletionException.toFlutterError(): FlutterError {
+
+    return FlutterError(
+        "file_deletion_exception",
+        message,
+        null
+    )
+
 }
