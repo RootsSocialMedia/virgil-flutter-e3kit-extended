@@ -2,8 +2,7 @@ package com.virgilsecurity.e3kit
 
 import com.virgilsecurity.android.common.exception.EThreeException
 import com.virgilsecurity.android.common.exception.EThreeRatchetException
-import com.virgilsecurity.crypto.ratchet.RatchetException
-import com.virgilsecurity.ratchet.exception
+import com.virgilsecurity.ratchet.exception.*
 // import com.virgilsecurity.android.common.exception.PrivateKeyNotFoundException
 import io.flutter.plugin.common.MethodChannel
 
@@ -14,7 +13,11 @@ fun MethodChannel.Result.error(error: FlutterError) {
 }
 
 fun Throwable.defaultFlutterError(): FlutterError {
-    val newMessage = message != null ? message : this.javaClass.name
+    val newMessage : String = if(message == null){
+        this.javaClass.name
+    }else{
+        message as String
+    }
     return FlutterError(
             "unknown_error",
             newMessage,
