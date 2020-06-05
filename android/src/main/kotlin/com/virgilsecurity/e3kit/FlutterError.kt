@@ -14,9 +14,10 @@ fun MethodChannel.Result.error(error: FlutterError) {
 }
 
 fun Throwable.defaultFlutterError(): FlutterError {
+    val newMessage = message != null ? message : this.javaClass.name
     return FlutterError(
             "unknown_error",
-            message,
+            newMessage,
             null
     )
 }
@@ -70,7 +71,11 @@ fun EThreeException.toFlutterError(): FlutterError {
         )
     }
 
-    return this.defaultFlutterError()
+    return FlutterError(
+        "ethree_exception",
+        message,
+        null
+    )
 }
 
 fun EThreeRatchetException.toFlutterError(): FlutterError {
@@ -130,7 +135,11 @@ fun EThreeRatchetException.toFlutterError(): FlutterError {
                 null
         )
     }
-    return this.defaultFlutterError()
+    return FlutterError(
+        "ethree_ratchet_exception",
+        message,
+        null
+    )
 }
 
 fun ProtocolException.toFlutterError(): FlutterError {
