@@ -325,7 +325,7 @@ class FlutterEThree {
                 instance.createRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
                         activity.runOnUiThread {
-                            ratchetChannels[identity] = ratchetRes
+//                            ratchetChannels[identity] = ratchetRes
                             result.success(true)
                         }
                     }
@@ -354,7 +354,7 @@ class FlutterEThree {
                 instance.joinRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
                         activity.runOnUiThread {
-                            ratchetChannels.put(key = identity, value = ratchetRes)
+//                            ratchetChannels.put(key = identity, value = ratchetRes)
                             result.success(true)
                         }
                     }
@@ -396,7 +396,7 @@ class FlutterEThree {
 
                     val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
                     if(ratchetChannel != null){
-                        ratchetChannels.put(key = identity, value = ratchetChannel!!)
+//                        ratchetChannels.put(key = identity, value = ratchetChannel!!)
                         result.success(true)
                     }else{
                         result.success(false)
@@ -421,7 +421,7 @@ class FlutterEThree {
 
                 instance.deleteRatchetChannel(card!!).addCallback(object: OnCompleteListener {
                     override fun onSuccess() {
-                        ratchetChannels.remove(identity)
+//                        ratchetChannels.remove(identity)
                         activity.runOnUiThread {
                             result.success(true)
                         }
@@ -444,9 +444,27 @@ class FlutterEThree {
     // the app will crash if not yet get the ratchetChannel!
     private fun ratchetEncrypt(identity: String, message: String, result: MethodChannel.Result) {
         try{
-            val ratchetChannel : RatchetChannel? = ratchetChannels[identity]
-            val encryptedMessage : String = ratchetChannel!!.encrypt(message)
-            result.success(encryptedMessage)
+            instance.findUsers(listOf(identity), true).addCallback(object: OnResultListener<FindUsersResult> {
+                override fun onSuccess(res: FindUsersResult) {
+                    try{
+                        val card : Card? = res.get(identity)
+                        val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
+                        val encryptedMessage : String = ratchetChannel!!.encrypt(message)
+                        activity.runOnUiThread {
+                            result.success(encryptedMessage)
+                        }
+                    }catch (e: Throwable){
+                        activity.runOnUiThread {
+                            result.error(e.toFlutterError())
+                        }
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    activity.runOnUiThread {
+                        result.error(throwable.toFlutterError())
+                    }
+                }
+            })
         }catch(throwable: Throwable){
             result.error(throwable.toFlutterError())
         }
@@ -455,9 +473,27 @@ class FlutterEThree {
     // the app will crash if not yet get the ratchetChannel!
     private fun ratchetDecrypt(identity: String, message: String, result: MethodChannel.Result) {
         try{
-            val ratchetChannel : RatchetChannel? = ratchetChannels[identity]
-            val decryptedMessage : String = ratchetChannel!!.decrypt(message)
-            result.success(decryptedMessage)
+            instance.findUsers(listOf(identity), true).addCallback(object: OnResultListener<FindUsersResult> {
+                override fun onSuccess(res: FindUsersResult) {
+                    try{
+                        val card : Card? = res.get(identity)
+                        val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
+                        val decryptedMessage : String = ratchetChannel!!.decrypt(message)
+                        activity.runOnUiThread {
+                            result.success(decryptedMessage)
+                        }
+                    }catch (e: Throwable){
+                        activity.runOnUiThread {
+                            result.error(e.toFlutterError())
+                        }
+                    }
+                }
+                override fun onError(throwable: Throwable) {
+                    activity.runOnUiThread {
+                        result.error(throwable.toFlutterError())
+                    }
+                }
+            })
         }catch(throwable: Throwable){
             result.error(throwable.toFlutterError())
         }
