@@ -112,14 +112,7 @@ class EThree {
   Future<T> _invokeMethod<T>(String method, [dynamic arguments]) {
     final args = (arguments ?? {});
     args['_id'] = _id;
-    return _channel.invokeMethod(method, args)
-      .catchError((e){
-        if(e is PlatformException && e.message.contains("Card for one or more of provided identities was not found")){
-          print(e.message);
-        }else{
-          throw(e);
-        }}
-    );
+    return _channel.invokeMethod(method, args);
   }
 
   static Future<dynamic> _handleMethodCall(MethodCall call) {
