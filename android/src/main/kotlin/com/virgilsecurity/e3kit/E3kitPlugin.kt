@@ -35,7 +35,7 @@ class E3kitPlugin: MethodCallHandler {
                     }
                 }
             }
-            override fun error(errorCode: String?, errorMessage: String?, errorDetails: Any?) {
+            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
                 handler.post {
                     run {
                         methodResult.error(errorCode, errorMessage, errorDetails)
@@ -52,12 +52,12 @@ class E3kitPlugin: MethodCallHandler {
         }
     }
 
-    val activity: Activity
+    val activity: Activity?
     val context: Context
     val channel: MethodChannel
     private val eThrees = HashMap<String, FlutterEThree>()
 
-    constructor(activity: Activity, context: Context, channel: MethodChannel) {
+    constructor(activity: Activity?, context: Context, channel: MethodChannel) {
         this.activity = activity
         this.context = context
         this.channel = channel
@@ -104,7 +104,7 @@ class E3kitPlugin: MethodCallHandler {
                                     semaphore.release()
                                 }
 
-                                override fun error(p0: String?, p1: String?, p2: Any?) {
+                                override fun error(p0: String, p1: String?, p2: Any?) {
                                     error = "$p0: $p1"
                                     semaphore.release()
                                 }
