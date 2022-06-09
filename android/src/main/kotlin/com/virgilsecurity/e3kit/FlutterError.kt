@@ -6,7 +6,7 @@ import com.virgilsecurity.ratchet.exception.*
 // import com.virgilsecurity.android.common.exception.PrivateKeyNotFoundException
 import io.flutter.plugin.common.MethodChannel
 
-typealias FlutterError = Triple<String?, String?, Any?>
+typealias FlutterError = Triple<String, String?, Any?>
 
 fun MethodChannel.Result.error(error: FlutterError) {
     this.error(error.first, error.second, error.third)

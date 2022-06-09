@@ -97,7 +97,7 @@ class E3kitPlugin: MethodCallHandler {
 
                         val semaphore = Semaphore(0)
 
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             channel.invokeMethod("tokenCallback", hashMapOf("_id" to instanceId), object : Result {
                                 override fun success(p0: Any?) {
                                     token = p0 as? String

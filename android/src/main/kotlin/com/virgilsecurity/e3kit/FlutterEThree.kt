@@ -17,10 +17,10 @@ import io.flutter.plugin.common.MethodChannel
 class FlutterEThree {
     val instance: EThree
     val channel: MethodChannel
-    val activity: Activity
+    val activity: Activity?
     val ratchetChannels = HashMap<String, RatchetChannel>()
 
-    constructor(instance: EThree, channel: MethodChannel, activity: Activity) {
+    constructor(instance: EThree, channel: MethodChannel, activity: Activity?) {
         this.instance = instance
         this.channel = channel
         this.activity = activity
@@ -120,7 +120,7 @@ class FlutterEThree {
                     getArgument("messages"),
                     result
                 )
-                else -> activity.runOnUiThread {
+                else -> activity?.runOnUiThread {
                     result.error(
                             "method_not_recognized",
                             "Method is not recognized",
@@ -134,13 +134,13 @@ class FlutterEThree {
     }
 
     private fun getIdentity(result: MethodChannel.Result) {
-        activity.runOnUiThread {
+        activity?.runOnUiThread {
             result.success(instance.identity)
         }
     }
 
     private fun hasLocalPrivateKey(result: MethodChannel.Result) {
-        activity.runOnUiThread {
+        activity?.runOnUiThread {
             result.success(instance.hasLocalPrivateKey())
         }
     }
@@ -148,12 +148,12 @@ class FlutterEThree {
     private fun register(result: MethodChannel.Result) {
         instance.register().addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -163,12 +163,12 @@ class FlutterEThree {
     private fun rotatePrivateKey(result: MethodChannel.Result) {
         instance.rotatePrivateKey().addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -180,14 +180,14 @@ class FlutterEThree {
             try {
                 instance.cleanup()
             } catch(e: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(e.toFlutterError())
                 }
 
                 return@execute
             }
 
-            activity.runOnUiThread {
+            activity?.runOnUiThread {
                 result.success(true)
             }
         }
@@ -200,12 +200,12 @@ class FlutterEThree {
                     it.value.rawCard.exportAsBase64String()!!
                 }
 
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(mapped)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -243,12 +243,12 @@ class FlutterEThree {
     private fun backupPrivateKey(password: String, result: MethodChannel.Result) {
         instance.backupPrivateKey(password).addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -258,12 +258,12 @@ class FlutterEThree {
     private fun resetPrivateKeyBackup(result: MethodChannel.Result) {
         instance.resetPrivateKeyBackup().addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -273,12 +273,12 @@ class FlutterEThree {
     private fun changePassword(oldPassword: String, newPassword: String, result: MethodChannel.Result) {
         instance.changePassword(oldPassword, newPassword).addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -288,12 +288,12 @@ class FlutterEThree {
     private fun restorePrivateKey(password: String, result: MethodChannel.Result) {
         instance.restorePrivateKey(password).addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -303,12 +303,12 @@ class FlutterEThree {
     private fun unregister(result: MethodChannel.Result) {
         instance.unregister().addCallback(object: OnCompleteListener {
             override fun onSuccess() {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.success(true)
                 }
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -324,20 +324,20 @@ class FlutterEThree {
 
                 instance.createRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
 //                            ratchetChannels[identity] = ratchetRes
                             result.success(true)
                         }
                     }
                     override fun onError(throwable: Throwable) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.error(throwable.toFlutterError())
                         }
                     }
                 })
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -353,20 +353,20 @@ class FlutterEThree {
 
                 instance.joinRatchetChannel(card!!).addCallback(object: OnResultListener<RatchetChannel> {
                     override fun onSuccess(ratchetRes: RatchetChannel) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
 //                            ratchetChannels.put(key = identity, value = ratchetRes)
                             result.success(true)
                         }
                     }
                     override fun onError(throwable: Throwable) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.error(throwable.toFlutterError())
                         }
                     }
                 })
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
@@ -407,11 +407,11 @@ class FlutterEThree {
 
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
-        })        
+        })
     }
 
     private fun deleteRatchetChannel(identity: String, result: MethodChannel.Result) {
@@ -422,23 +422,23 @@ class FlutterEThree {
                 instance.deleteRatchetChannel(card!!).addCallback(object: OnCompleteListener {
                     override fun onSuccess() {
 //                        ratchetChannels.remove(identity)
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.success(true)
                         }
                     }
                     override fun onError(throwable: Throwable) {
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.error(throwable.toFlutterError())
                         }
                     }
                 })
             }
             override fun onError(throwable: Throwable) {
-                activity.runOnUiThread {
+                activity?.runOnUiThread {
                     result.error(throwable.toFlutterError())
                 }
             }
-        })        
+        })
     }
 
     // the app will crash if not yet get the ratchetChannel!
@@ -450,17 +450,17 @@ class FlutterEThree {
                         val card : Card? = res.get(identity)
                         val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
                         val encryptedMessage : String = ratchetChannel!!.encrypt(message)
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.success(encryptedMessage)
                         }
                     }catch (e: Throwable){
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.error(e.toFlutterError())
                         }
                     }
                 }
                 override fun onError(throwable: Throwable) {
-                    activity.runOnUiThread {
+                    activity?.runOnUiThread {
                         result.error(throwable.toFlutterError())
                     }
                 }
@@ -479,17 +479,17 @@ class FlutterEThree {
                         val card : Card? = res.get(identity)
                         val ratchetChannel: RatchetChannel? = instance.getRatchetChannel(card!!)
                         val decryptedMessage : String = ratchetChannel!!.decrypt(message)
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.success(decryptedMessage)
                         }
                     }catch (e: Throwable){
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             result.error(e.toFlutterError())
                         }
                     }
                 }
                 override fun onError(throwable: Throwable) {
-                    activity.runOnUiThread {
+                    activity?.runOnUiThread {
                         result.error(throwable.toFlutterError())
                     }
                 }
